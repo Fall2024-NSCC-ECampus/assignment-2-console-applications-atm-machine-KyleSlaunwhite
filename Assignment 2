@@ -1,0 +1,140 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+using namespace std;
+
+// function prototypes
+void printIntroMenu();
+void printMainMenu();
+void start();
+void login();
+void createAccount();
+void depositMoney();
+void withdrawMoney();
+void requestBalance();
+
+// global variables
+char menuInput;
+string userId, password;
+double balance = 0.0;
+bool isLoggedIn = false;
+
+// the main function
+int main() {
+    cout << "Hi! Welcome to Mr. Slaunwhite's ATM Machine!" << endl;
+    start();
+    return 0;
+}
+
+void printIntroMenu() {
+    cout << "\nPlease select an option from the menu below:\n";
+    cout << "l -> Login\n";
+    cout << "c -> Create New Account\n";
+    cout << "q -> Quit\n";
+    cout << "> ";
+}
+
+void printMainMenu() {
+    cout << "\nd -> Deposit Money\n";
+    cout << "w -> Withdraw Money\n";
+    cout << "r -> Request Balance\n";
+    cout << "q -> Quit\n";
+    cout << "> ";
+}
+
+void start() {
+    while (true) {
+        printIntroMenu();
+        cin >> menuInput;
+
+        switch (menuInput) {
+            case 'l':
+                login();
+                break;
+            case 'c':
+                createAccount();
+                break;
+            case 'q':
+                exit(0);
+            default:
+                cout << "Invalid option! Please try again.\n";
+        }
+    }
+}
+
+void createAccount() {
+    cout << "Please enter your user id: ";
+    cin >> userId;
+    cout << "Please enter your password: ";
+    cin >> password;
+
+    cout << "\nThank You! Your account has been created!\n";
+}
+
+void login() {
+    string inputUserId, inputPassword;
+
+    cout << "Please enter your user id: ";
+    cin >> inputUserId;
+    cout << "Please enter your password: ";
+    cin >> inputPassword;
+
+    if (inputUserId == userId && inputPassword == password) {
+        cout << "\nAccess Granted!\n";
+        isLoggedIn = true;
+
+        // Once logged in, display the main menu
+        while (isLoggedIn) {
+            printMainMenu();
+            cin >> menuInput;
+
+            switch (menuInput) {
+                case 'd':
+                    depositMoney();
+                    break;
+                case 'w':
+                    withdrawMoney();
+                    break;
+                case 'r':
+                    requestBalance();
+                    break;
+                case 'q':
+                    cout << "Thanks for stopping by!\n";
+                    isLoggedIn = false;
+                    break;
+                default:
+                    cout << "Invalid option! Please try again.\n";
+            }
+        }
+    } else {
+        cout << "\n******** LOGIN FAILED! ********\n";
+    }
+}
+
+void depositMoney() {
+    double amount;
+    cout << "Amount of deposit: $";
+    cin >> amount;
+    if (amount > 0) {
+        balance += amount;
+        cout << "Deposit successful! Your new balance is $" << balance << ".\n";
+    } else {
+        cout << "Invalid amount! Please enter a positive value.\n";
+    }
+}
+
+void withdrawMoney() {
+    double amount;
+    cout << "Amount of withdrawal: $";
+    cin >> amount;
+    if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        cout << "Withdrawal successful! Your new balance is $" << balance << ".\n";
+    } else {
+        cout << "Invalid amount or insufficient balance!\n";
+    }
+}
+
+void requestBalance() {
+    cout << "Your balance is $" << balance << ".\n";
+}
