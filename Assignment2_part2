@@ -1,0 +1,148 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
+
+// Function prototypes
+void printIntroMenu();
+void printMainMenu();
+void start();
+void login();
+void createAccount();
+void deposit();
+void withdraw();
+void requestBalance();
+
+// Global variables to store user info and menu selections
+char menuInput;
+string storedUserId;
+string storedPassword;
+double balance = 0.0;
+bool loggedIn = false;
+
+// The main function
+int main() {
+    // Welcome message
+    cout << "Hi! Welcome to Mr. Slaunwhite's ATM Machine!" << endl;
+    // Start the ATM program
+    start();
+    return 0;
+}
+
+// Function to display the introduction menu
+void printIntroMenu() {
+    cout << "\nPlease select an option from the menu below:" << endl;
+    cout << "l  -> Login" << endl;
+    cout << "c -> Create New Account" << endl;
+    cout << "q -> Quit" << endl;
+    cout << "> ";
+}
+
+// Function to display the main menu after a successful login
+void printMainMenu() {
+    cout << "\nd  -> Deposit Money" << endl;
+    cout << "w -> Withdraw Money" << endl;
+    cout << "r  -> Request Balance" << endl;
+    cout << "q -> Quit" << endl;
+    cout << "> ";
+}
+
+// Function to handle the initial menu and user selection
+void start() {
+    while (true) {
+        printIntroMenu();
+        cin >> menuInput;
+        switch (menuInput) {
+            case 'l':
+                login();
+                if (loggedIn) {  // Proceed to main menu if login is successful
+                    while (true) {
+                        printMainMenu();
+                        cin >> menuInput;
+                        if (menuInput == 'd') {
+                            deposit();
+                        } else if (menuInput == 'w') {
+                            withdraw();
+                        } else if (menuInput == 'r') {
+                            requestBalance();
+                        } else if (menuInput == 'q') {
+                            cout << "Thanks for stopping by!" << endl;
+                            exit(0);
+                        } else {
+                            cout << "Invalid selection. Please try again." << endl;
+                        }
+                    }
+                }
+                break;
+            case 'c':
+                createAccount();
+                break;
+            case 'q':
+                cout << "Thanks for stopping by!" << endl;
+                exit(0);
+            default:
+                cout << "Invalid selection. Please try again." << endl;
+                break;
+        }
+    }
+}
+
+// Function to create a new account
+void createAccount() {
+    cout << "Please enter your user ID: ";
+    cin >> storedUserId;
+    cout << "Please enter your password: ";
+    cin >> storedPassword;
+    cout << "Thank You! Your account has been created!" << endl;
+}
+
+// Function to log in
+void login() {
+    string userId, password;
+    cout << "Please enter your user ID: ";
+    cin >> userId;
+    cout << "Please enter your password: ";
+    cin >> password;
+
+    if (userId == storedUserId && password == storedPassword) {
+        cout << "Access Granted!" << endl;
+        loggedIn = true;
+    } else {
+        cout << "******** LOGIN FAILED! ********" << endl;
+        loggedIn = false;
+    }
+}
+
+// Function to handle deposits
+void deposit() {
+    double amount;
+    cout << "Amount of deposit: $";
+    cin >> amount;
+    if (amount > 0) {
+        balance += amount;
+        cout << "Deposit successful. Your new balance is $" << balance << "." << endl;
+    } else {
+        cout << "Invalid amount. Please try again." << endl;
+    }
+}
+
+// Function to handle withdrawals
+void withdraw() {
+    double amount;
+    cout << "Amount of withdrawal: $";
+    cin >> amount;
+    if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        cout << "Withdrawal successful. Your new balance is $" << balance << "." << endl;
+    } else if (amount > balance) {
+        cout << "Insufficient funds. Your balance is $" << balance << "." << endl;
+    } else {
+        cout << "Invalid amount. Please try again." << endl;
+    }
+}
+
+// Function to display the current balance
+void requestBalance() {
+    cout << "Your balance is $" << balance << "." << endl;
+}
